@@ -4,8 +4,21 @@ import type { ResultSetHeader } from "mysql2";
 
 import { verifyAdminSession } from "../../../lib/auth";
 
-// GET: Retrieve all products
-export async function GET() {
+
+ // GET: Retrieve all products
+export async function GET(request: Request) {
+  const isAuthenticated = await verifyAdminSession(request);
+
+  if (!isAuthenticated) {
+    return Response.json(
+      {
+        success: false,
+        message: "Please log in as an admin first.",
+      },
+      { status: 401 }
+    );
+  }
+
   try {
     const [rows] = await pool.query(
       `SELECT id, name, category, price, quantity,
@@ -43,7 +56,7 @@ export async function POST(request: Request) {
     );
   }
 
-  
+
   try {
     const body = await request.json();
 
