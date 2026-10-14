@@ -67,9 +67,36 @@ const [selectedCategory, setSelectedCategory] = useState("all");
     }
   }, []);
 
-  useEffect(() => {
-    void loadProducts();
-  }, [loadProducts]);
+  
+useEffect(() => {
+  let cancelled = false;
+
+  async function checkLogin() {
+    try {
+      const response = await fetch("/api/auth/me", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        window.location.replace("/login");
+        return;
+      }
+
+      if (!cancelled) {
+        await loadProducts();
+      }
+    } catch {
+      window.location.replace("/login");
+    }
+  }
+
+  void checkLogin();
+
+  return () => {
+    cancelled = true;
+  };
+}, [loadProducts]);
+
 
   function openAddForm() {
     setEditingProduct(null);
@@ -178,6 +205,27 @@ const [selectedCategory, setSelectedCategory] = useState("all");
     }
   }
 
+  
+async function handleLogout() {
+  try {
+    const response = await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error("Logout failed.");
+    }
+
+    window.location.assign("/login");
+  } catch {
+    setNotice("Unable to log out. Please try again.");
+    setNoticeType("danger");
+  }
+}
+
+
   const totalStock = products.reduce(
     (total, product) => total + Number(product.quantity),
     0
@@ -233,13 +281,27 @@ const filteredProducts = products.filter((product) => {
             </p>
           </div>
 
-          <button
-            className="btn btn-primary px-4"
-            type="button"
-            onClick={() => (showForm ? setShowForm(false) : openAddForm())}
-          >
-            {showForm ? "Close Form" : "+ Add Product"}
-          </button>
+
+<div className="d-flex flex-wrap gap-2">
+  <button
+    className="btn btn-outline-danger"
+    type="button"
+    onClick={handleLogout}
+  >
+    Logout
+  </button>
+
+  <button
+    className="btn btn-primary px-4"
+    type="button"
+    onClick={() => (showForm ? setShowForm(false) : openAddForm())}
+  >
+    {showForm ? "Close Form" : "+ Add Product"}
+  </button>
+</div>
+
+
+       
         </header>
 
         {notice && (

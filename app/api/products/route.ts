@@ -2,6 +2,8 @@
 import pool from "../../../lib/db";
 import type { ResultSetHeader } from "mysql2";
 
+import { verifyAdminSession } from "../../../lib/auth";
+
 // GET: Retrieve all products
 export async function GET() {
   try {
@@ -28,6 +30,20 @@ export async function GET() {
 
 // POST: Add a new product
 export async function POST(request: Request) {
+
+      const isAuthenticated = await verifyAdminSession(request);
+
+  if (!isAuthenticated) {
+    return Response.json(
+      {
+        success: false,
+        message: "Please log in as an admin first.",
+      },
+      { status: 401 }
+    );
+  }
+
+  
   try {
     const body = await request.json();
 

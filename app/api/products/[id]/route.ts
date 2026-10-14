@@ -2,12 +2,28 @@
 import pool from "../../../../lib/db";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 
+import { verifyAdminSession } from "../../../../lib/auth";
+
 type Context = {
   params: Promise<{ id: string }>;
 };
 
 // PUT: Update an existing product
 export async function PUT(request: Request, { params }: Context) {
+
+    const isAuthenticated = await verifyAdminSession(request);
+
+  if (!isAuthenticated) {
+    return Response.json(
+      {
+        success: false,
+        message: "Please log in as an admin first.",
+      },
+      { status: 401 }
+    );
+  }
+
+
   try {
     const { id: idParam } = await params;
     const id = Number(idParam);
@@ -87,6 +103,20 @@ export async function PUT(request: Request, { params }: Context) {
 
 // DELETE: Delete a product
 export async function DELETE(_request: Request, { params }: Context) {
+
+    const isAuthenticated = await verifyAdminSession(_request);
+
+  if (!isAuthenticated) {
+    return Response.json(
+      {
+        success: false,
+        message: "Please log in as an admin first.",
+      },
+      { status: 401 }
+    );
+  }
+
+  
   try {
     const { id: idParam } = await params;
     const id = Number(idParam);
