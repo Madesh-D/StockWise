@@ -266,8 +266,18 @@ const filteredProducts = products.filter((product) => {
         <div className="rounded bg-primary p-3 mb-2">
           ▦ &nbsp; Dashboard
         </div>
-        <div className="p-3 text-white-50">▤ &nbsp; Products</div>
-        <div className="p-3 text-white-50">◉ &nbsp; Reports</div>
+        <a
+  href="#products"
+  className="p-3 text-white-50 text-decoration-none"
+>
+  ▤ &nbsp; Products
+</a>
+        <a
+  href="#reports"
+  className="p-3 text-white-50 text-decoration-none"
+>
+  ◉ &nbsp; Reports
+</a>
 
         <div className="mt-auto small text-secondary">StockWise v1.0</div>
       </aside>
@@ -454,7 +464,7 @@ const filteredProducts = products.filter((product) => {
           </div>
         </div>
 
-        <section className="card border-0 shadow-sm">
+        <section id="products" className="card border-0 shadow-sm">
           <div className="card-body p-3 p-md-4">
           
           
@@ -576,6 +586,48 @@ const filteredProducts = products.filter((product) => {
             )}
           </div>
         </section>
+
+
+        <section id="reports" className="card border-0 shadow-sm mt-4">
+  <div className="card-body p-4">
+    <h5 className="fw-bold mb-4">Inventory Reports</h5>
+
+    <div className="row g-3">
+      <div className="col-12 col-md-4">
+        <div className="border rounded p-3 h-100">
+          <p className="text-secondary mb-2">Inventory Value</p>
+          <h4 className="fw-bold mb-0">
+            ₹
+            {products
+              .reduce(
+                (total, product) =>
+                  total +
+                  Number(product.price) * Number(product.quantity),
+                0
+              )
+              .toLocaleString("en-IN", {
+                maximumFractionDigits: 2,
+              })}
+          </h4>
+        </div>
+      </div>
+
+      <div className="col-12 col-md-4">
+        <div className="border rounded p-3 h-100">
+          <p className="text-secondary mb-2">Low-Stock Products</p>
+          <h4 className="fw-bold text-danger mb-0">{lowStock}</h4>
+        </div>
+      </div>
+
+      <div className="col-12 col-md-4">
+        <div className="border rounded p-3 h-100">
+          <p className="text-secondary mb-2">Categories</p>
+          <h4 className="fw-bold mb-0">{categories.length}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
         <p className="text-center text-secondary small mt-4">
           StockWise Inventory Management System
