@@ -263,9 +263,12 @@ const filteredProducts = products.filter((product) => {
         <p className="text-secondary small">Inventory Management</p>
         <hr className="border-secondary" />
 
-        <div className="rounded bg-primary p-3 mb-2">
-          ▦ &nbsp; Dashboard
-        </div>
+        <a
+  href="#dashboard"
+  className="rounded bg-primary p-3 mb-2 text-white text-decoration-none d-block"
+>
+  ▦ &nbsp; Dashboard
+</a>
         <a
   href="#products"
   className="p-3 text-white-50 text-decoration-none"
@@ -282,7 +285,9 @@ const filteredProducts = products.filter((product) => {
         <div className="mt-auto small text-secondary">StockWise v1.0</div>
       </aside>
 
-      <main className="flex-grow-1 p-3 p-md-4 p-xl-5">
+      <main id="dashboard" 
+      className="flex-grow-1 p-3 p-md-4 p-xl-5">
+        
         <header className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
           <div>
             <h2 className="fw-bold mb-1">Dashboard</h2>
