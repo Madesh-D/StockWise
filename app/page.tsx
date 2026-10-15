@@ -499,7 +499,16 @@ const filteredProducts = products.filter((product) => {
               </div>
             )}
 
-            {!loading && !error && products.length > 0 && (
+
+            {!loading && !error &&
+  products.length > 0 &&
+  filteredProducts.length === 0 && (
+    <div className="alert alert-warning">
+      No products match your search or selected category.
+    </div>
+)}
+
+            {!loading && !error && filteredProducts.length > 0 && (
               <div className="table-responsive">
                 <table className="table table-hover align-middle">
                   <thead className="table-light">
@@ -515,7 +524,7 @@ const filteredProducts = products.filter((product) => {
                   </thead>
 
                   <tbody>
-                    {products.map((product) => (
+                    {filteredProducts.map((product) => (
                       <tr key={product.id}>
                         <td>{product.id}</td>
                         <td className="fw-semibold">{product.name}</td>
